@@ -1,0 +1,962 @@
+---
+title: "Development of the 3PT Shot in the NBA from '97-'20"
+author: "Bailey LaRea"
+output:
+html_document:
+df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(tibble)
+NBAfile<-read.csv("/Users/baileylarea/Downloads/NBA_Shot_Locations_1997_2020.csv", header=TRUE) 
+NBAfile<-as.data.frame(NBAfile)
+```
+
+```{r}
+as_tibble(NBAfile)
+```
+
+```{r}
+library(lubridate)
+colnames(NBAfile)<-c('GameID', 'GameEventID','PlayerID', 'PlayerName', 'TeamID', 'TeamName', 'Period', 'MinRemaining', 'SecRemaining', 'ActionType', 'ShotType', 'ShotZoneBasic', 'ShotZoneArea', 'ShotZoneRange', 'ShotDistance', 'XLocation', 'YLocation','ShotMadeFlag', 'GameDate', 'HomeTeam', 'AwayTeam','SeasonType')
+class(NBAfile$GameDate)
+NBAfile$GameDate<-ymd(NBAfile$GameDate)
+print(NBAfile$GameDate)
+print(NBAfile)
+```
+
+```{r}
+#Finding the 3 point shot average and count from 1997 (OCT31 to DEC31)
+filter1997<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('1997',GameDate)))
+avg1997<-mean(filter1997$ShotMadeFlag)*100
+print(avg1997)
+#33.958% 3 point shooting average in 1997
+print(count(filter1997))
+#10,142 3 point shots taken in 1997
+(print(10142/2))
+#5,071 3 point shots taken every month if played over the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt1997<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('1997', GameDate)))
+avg2pt1997<-mean(filter2pt1997$ShotMadeFlag)*100
+print(avg2pt1997)
+#46.66818% 2 point FG made
+count2pt1997<-(count(filter2pt1997))
+print(count2pt1997)
+#57,236 2 point shots taken
+(57236/2)
+#28,618 2 points shot taken every month if played over the entire duration
+
+#finding the proportion of 2 point shots vs 3 point shots during this time period.
+add1997<-(57236+10142)
+print(add1997)
+prop2_1997<-(count2pt1997/add1997)
+print(prop2_1997)
+#.849 is the proportion of 2 point shots taken compared to the amount of total shots
+```
+
+
+
+```{r}
+#Finding the 3 point shot average and count from 1998 (JAN1 to JUN14)
+filter1998<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('1998', GameDate)))
+avg1998<-mean(filter1998$ShotMadeFlag)*100
+print(avg1998)
+#34.83146% 3 point shooting average in 1998
+print(count(filter1998))
+#22,072 3 point shots taken
+print(22072/5)
+#4,414.4 3 point shots taken per month if played over the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt1998<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('1998', GameDate)))
+avg2pt1998<-mean(filter2pt1998$ShotMadeFlag)*100
+print(avg2pt1998)
+#46.66818% 2 point FG made
+count2pt1998<-(count(filter2pt1998))
+print(count2pt1998)
+#110,607 2 point shots taken
+(110607/5)
+#22,121.4 2 points shot taken every month if played over the entire duration
+
+#finding the proportion of 2 point shots vs 3 point shots during this time period.
+add1998<-(110607+22072)
+print(add1998)
+prop2_1998<-(count2pt1998/add1998)
+print(prop2_1998)
+#.8336 is the proportion of 2 point shots taken vs 3 point shots
+```
+
+```{r}
+#Finding the 3 point shot average and count from 1999 (FEB5 to DEC31)
+filter1999<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('1999', GameDate)))
+avg1999<-mean(filter1999$ShotMadeFlag)*100
+print(avg1999)
+#34.05657% 3 point shooting average in 1999
+print(count(filter1999))
+#32,170 3 point shots taken
+print(32170/11)
+#2,924.545 3 point shots taken per month if played over the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt1999<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('1999', GameDate)))
+avg2pt1999<-mean(filter2pt1999$ShotMadeFlag)*100
+print(avg2pt1999)
+#45.87552% 2 point FG made
+count2pt1999<-(count(filter2pt1999))
+print(count2pt1999)
+#160,796 2 point shots taken
+(160796/11)
+#14,617.82 2 points shot taken every month if played over the entire duration
+
+add1999<-(160796+32170)
+print(add1999)
+prop2_1999<-(count2pt1999/add1999)
+print(prop2_1999)
+#.833 is the proportion of 2 point shots taken vs 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2000 (JAN2 to DEC31)
+filter2000<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2000', GameDate)))
+avg2000<-mean(filter2000$ShotMadeFlag)*100
+print(avg2000)
+#35.17314% 3 point shooting average in 2000
+print(count(filter2000))
+#35,203 3 point shots taken
+print(35203/12)
+#2,933.583 3 point shots taken per month if played over the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2000<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2000', GameDate)))
+avg2pt2000<-mean(filter2pt2000$ShotMadeFlag)*100
+print(avg2pt2000)
+#46.52844% 2 point FG made
+count2pt2000<-(count(filter2pt2000))
+print(count2pt2000)
+# 171,839 2 point shots taken
+(171839/12)
+# 14,319.92 2 points shot taken every month if played over the entire duration
+
+add2000<-(171839+35203)
+print(add2000)
+prop2_2000<-(count2pt2000/add2000)
+print(prop2_2000)
+# .82997 is the proportion of 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2001 (JAN1 to DEC31)
+filter2001<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2001', GameDate)))
+avg2001<-mean(filter2001$ShotMadeFlag)*100
+print(avg2001)
+#35.58733% 3 point shooting average in 2001
+print(count(filter2001))
+#35,670 3 point shots taken
+print(35670/12)
+#2,924.545 3 point shots taken per month if played over the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2001<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2001', GameDate)))
+avg2pt2001<-mean(filter2pt2001$ShotMadeFlag)*100
+print(avg2pt2001)
+#46.09059% 2 point FG made
+count2pt2001<-(count(filter2pt2001))
+print(count2pt2001)
+# 167,928 2 point shots taken
+(167928/12)
+# 13,994 2 points shot taken every month if played over the entire duration
+
+add2001<-(167928+35670)
+print(add2001)
+prop2_2001<-(count2pt2001/add2001)
+print(prop2_2001)
+# .824 is the proportion of 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2002 (JAN1 to DEC31)
+filter2002<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2002', GameDate)))
+avg2002<-mean(filter2002$ShotMadeFlag)*100
+print(avg2002)
+#35.16832% 3 point shooting average in 2002
+print(count(filter2002))
+#37,548 3 point shots taken
+print(37548/12)
+#3,129 3 point shots taken per month if played the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2002<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2002', GameDate)))
+avg2pt2002<-mean(filter2pt2002$ShotMadeFlag)*100
+print(avg2pt2002)
+#46.66818% 2 point FG made
+count2pt2002<-(count(filter2pt2002))
+print(count2pt2002)
+#167,714 2 point shots taken
+(167714/12)
+#13,976.17 2 points shot taken every month if played over the entire duration
+
+add2002<-(168714+37588)
+print(add2002)
+prop2_2002<-(count2pt2002/add2002)
+print(prop2_2002)
+#.818 is the proportion of 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2003 (JAN1 to DEC31)
+filter2003<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2003', GameDate)))
+avg2003<-mean(filter2003$ShotMadeFlag)*100
+print(avg2003)
+#34.76608% 3 point shooting average in 2003
+print(count(filter2003))
+#38,411 3 point shots taken
+print(38411/12)
+#3,200.917 3 point shots taken per month if played for the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2003<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2003', GameDate)))
+avg2pt2003<-mean(filter2pt2003$ShotMadeFlag)*100
+print(avg2pt2003)
+#46.66818% 2 point FG made
+count2pt2003<-(count(filter2pt2003))
+print(count2pt2003)
+#160,630 2 point shots taken
+(160630/12)
+#13,385.83 2 points shot taken every month if played over the entire duration
+
+add2003<-(167630+38411)
+print(add2003)
+prop2_2003<-(count2pt2003/add2003)
+print(prop2_2003)
+#.814 is the proportion of 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2004 (JAN2 to DEC31)
+filter2004<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2004', GameDate)))
+avg2004<-mean(filter2004$ShotMadeFlag)*100
+print(avg2004)
+#34.72263% 3 point shooting average in 2004
+print(count(filter2004))
+#37,765 3 point shots taken
+print(37765/12)
+#3,147.083 3 point shots taken per month if played for the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2004<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2004', GameDate)))
+avg2pt2004<-mean(filter2pt2004$ShotMadeFlag)*100
+print(avg2pt2004)
+#46.66818% 2 point FG made
+count2pt2004<-(count(filter2pt2004))
+print(count2pt2004)
+#160,873 2 point shots taken
+(160873/12)
+#13,406.08 2 points shot taken every month if played over the entire duration
+
+add2004<-(160873+37765)
+print(add2004)
+prop2_2004<-(count2pt2004/add2004)
+print(prop2_2004)
+#.810 is the proportion of 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2005 (JAN2 to DEC31)
+filter2005<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2005', GameDate)))
+avg2005<-mean(filter2005$ShotMadeFlag)*100
+print(avg2005)
+#35.76% 3 point shooting average in 2005
+print(count(filter2005))
+#42,010 3 point shots taken
+print(42010/12)
+#3500.833 3 point shots taken per month if played the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2005<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2005', GameDate)))
+avg2pt2005<-mean(filter2pt2005$ShotMadeFlag)*100
+print(avg2pt2005)
+#47.217% 2 point FG made
+count2pt2005<-(count(filter2pt2005))
+print(count2pt2005)
+#169,245 2 point shots taken
+(269245/12)
+#22,437.08 2 points shot taken every month if played over the entire duration
+
+add2005<-(169245+42010)
+print(add2005)
+prop2_2005<-(count2pt2005/add2005)
+print(prop2_2005)
+#.801 is the proportion of  2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2006 (JAN1 to DEC31)
+filter2006<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2006', GameDate)))
+avg2006<-mean(filter2006$ShotMadeFlag)*100
+print(avg2006)
+#35.59012% 3 point shooting average in 2006
+print(count(filter2006))
+#44,237 3 point shots taken
+print(44237/12)
+#3,686.417 3 point shots taken per month if played the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2006<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2006', GameDate)))
+avg2pt2006<-mean(filter2pt2006$ShotMadeFlag)*100
+print(avg2pt2006)
+#48.13772% 2 point FG made
+count2pt2006<-(count(filter2pt2006))
+print(count2pt2006)
+#167,719 2 point shots taken
+(167719/12)
+#13,976.58 2 points shot taken every month if played over the entire duration
+
+add2006<-(167719+44237)
+print(add2006)
+prop2_2006<-(count2pt2006/add2006)
+print(prop2_2006)
+#.791 is the proportion of 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2007 (JAN1 to DEC31)
+filter2007<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2007', GameDate)))
+avg2007<-mean(filter2007$ShotMadeFlag)*100
+print(avg2007)
+#35.96432% 3 point shooting average in 1999
+print(count(filter2007))
+#45,737 3 point shots taken
+print(45737/12)
+#3,811.42 3 point shots taken per month if played the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2007<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2007', GameDate)))
+avg2pt2007<-mean(filter2pt2007$ShotMadeFlag)*100
+print(avg2pt2007)
+#48.237% 2 point FG made
+count2pt2007<-(count(filter2pt2007))
+print(count2pt2007)
+#163,797 2 point shots taken
+(163797/12)
+#13,649.75 2 points shot taken every month if played over the entire duration
+
+add2007<-(163797+45737)
+print(add2007)
+prop2_2007<-(count2pt2007/add2007)
+print(prop2_2007)
+#.783 is the proportion of 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2008 (JAN2 to DEC31)
+filter2008<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2008', GameDate)))
+avg2008<-mean(filter2008$ShotMadeFlag)*100
+print(avg2008)
+#36.26177% 3 point shooting average in 2008
+print(count(filter2008))
+#48,103 3 point shots taken
+print(48103/12)
+#4,008.545 3 point shots taken per month if played for the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2008<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2008', GameDate)))
+avg2pt2008<-mean(filter2pt2008$ShotMadeFlag)*100
+print(avg2pt2008)
+#48.379118% 2 point FG made
+count2pt2008<-(count(filter2pt2008))
+print(count2pt2008)
+#167,963 2 point shots taken
+(167963/12)
+#13,996.92 2 points shot taken every month if played over the entire duration
+
+add2008<-(48103+167963)
+print(add2008)
+prop2_2008<-(count2pt2008/add2008)
+print(prop2_2008)
+#.777 is the proportion of 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2009 (JAN2 to DEC31)
+#This is the year Stephen Curry was drafted for the Golden State Warriors
+filter2009<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2009', GameDate)))
+avg2009<-mean(filter2009$ShotMadeFlag)*100
+print(avg2009)
+#36.20531% 3 point shooting average in 1999
+print(count(filter2009))
+#47,772 3 point shots taken
+(47772/12)
+#3,981 3 point shots taken per month if played for the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2009<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2009', GameDate)))
+avg2pt2009<-mean(filter2pt2009$ShotMadeFlag)*100
+print(avg2pt2009)
+#48.836% 2 point FG made
+count2pt2009<-(count(filter2pt2009))
+print(count2pt2009)
+#265,379 2 point shots taken
+(165379/12)
+#13,781.58 2 points shot taken every month if played over the entire duration
+
+add2009<-(165379+47772)
+print(add2009)
+prop2_2009<-(count2pt2009/add2009)
+print(prop2_2009)
+#.776 more 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2010 (JAN1 to DEC31)
+filter2010<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2010', GameDate)))
+avg2010<-mean(filter2010$ShotMadeFlag)*100
+print(avg2010)
+#35.89844% 3 point shooting average in 2010
+print(count(filter2010))
+#48,328 3 point shots taken
+(48328/12)
+#4027.333 3 point shots taken per month if played for the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2010<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2010', GameDate)))
+avg2pt2010<-mean(filter2pt2010$ShotMadeFlag)*100
+print(avg2pt2010)
+#48.948% 2 point FG made
+count2pt2010<-(count(filter2pt2010))
+print(count2pt2010)
+#166,100 2 point shots taken
+(166100/12)
+#13,841.67 2 points shot taken every month if played over the entire duration
+
+add2010<-(166100+48328)
+print(add2010)
+prop2_2010<-(count2pt2010/add2010)
+print(prop2_2010)
+#.775 is the proportion of 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2011 (JAN1 to DEC31)
+filter2011<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2011', GameDate)))
+avg2011<-mean(filter2011$ShotMadeFlag)*100
+print(avg2011)
+#35.43488% 3 point shooting average in 2011
+print(count(filter2011))
+#31,802 3 point shots taken
+print(31802/12)
+#2,650.167 3 point shots taken per month if played for the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2011<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2011', GameDate)))
+avg2pt2011<-mean(filter2pt2011$ShotMadeFlag)*100
+print(avg2pt2011)
+#48.68% 2 point FG made
+count2pt2011<-(count(filter2pt2011))
+print(count2pt2011)
+#111,652 2 point shots taken
+(111652/12)
+#9304.333 2 points shot taken every month if played over the entire duration
+
+add2011<-(111652+31802)
+print(add2011)
+prop2_2011<-(count2pt2011/add2011)
+print(prop2_2011)
+#.778 is the proportion of 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2012 (JAN1 to DEC31)
+filter2012<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2012', GameDate)))
+avg2012<-mean(filter2012$ShotMadeFlag)*100
+print(avg2012)
+#35.11853% 3 point shooting average in 2012
+print(count(filter2012))
+#55,512 3 point shots taken
+print(55512/12)
+#4,626 3 point shots taken per month if played for the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2012<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2012', GameDate)))
+avg2pt2012<-mean(filter2pt2012$ShotMadeFlag)*100
+print(avg2pt2012)
+#47.60838% 2 point FG made
+count2pt2012<-(count(filter2pt2012))
+print(count2pt2012)
+#184,875 2 point shots taken
+(184875/12)
+#15,406.25 2 points shot taken every month if played over the entire duration
+
+add2012<-(184875+55512)
+print(add2012)
+prop2_2012<-(count2pt2012/add2012)
+print(prop2_2012)
+#.769 is the proportion of 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2013 (JAN1 to DEC31)
+filter2013<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2013', GameDate)))
+avg2013<-mean(filter2013$ShotMadeFlag)*100
+print(avg2013)
+#35.8266% 3 point shooting average in 2013
+print(count(filter2013))
+#54,119 3 point shots taken
+print(54119/12)
+#4,509.917 3 point shots taken per month if played for the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2013<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2013', GameDate)))
+avg2pt2013<-mean(filter2pt2013$ShotMadeFlag)*100
+print(avg2pt2013)
+#48.45818% 2 point FG made
+count2pt2013<-(count(filter2pt2013))
+print(count2pt2013)
+#163,541 2 point shots taken
+(163541/12)
+#13,628.42 2 points shot taken every month if played over the entire duration
+
+add2013<-(163541+54119)
+print(add2013)
+prop2_2013<-(count2pt2013/add2013)
+print(prop2_2013)
+#.751 is the proportion of 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2014 (JAN1 to DEC31)
+filter2014<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2014', GameDate)))
+avg2014<-mean(filter2014$ShotMadeFlag)*100
+print(avg2014)
+#35.71% 3 point shooting average in 2014
+print(count(filter2014))
+#58,285 3 point shots taken
+print(58285/12)
+#4,857.083 3 point shots taken per month if played for the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2014<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2014', GameDate)))
+avg2pt2014<-mean(filter2pt2014$ShotMadeFlag)*100
+print(avg2pt2014)
+#49.039% 2 point FG made
+count2pt2014<-(count(filter2pt2014))
+print(count2pt2014)
+#162,457 2 point shots taken
+(162457/12)
+#13,538.08 2 points shot taken every month if played over the entire duration
+
+add2014<-(162457+58285)
+print(add2014)
+prop2_2014<-(count2pt2014/add2014)
+print(prop2_2014)
+#.736 is the proportion of 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2015 (JAN1 to DEC31)
+filter2015<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2015', GameDate)))
+avg2015<-mean(filter2015$ShotMadeFlag)*100
+print(avg2015)
+#34.92401% 3 point shooting average in 2015
+print(count(filter2015))
+#61,190 3 point shots taken
+print(61190/12)
+#5,099.167 3 point shots taken per month if played for the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2015<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2015', GameDate)))
+avg2pt2015<-mean(filter2pt2015$ShotMadeFlag)*100
+print(avg2pt2015)
+#48.31757% 2 point FG made
+count2pt2015<-(count(filter2pt2015))
+print(count2pt2015)
+#160,244 2 point shots taken
+(160244/12)
+#13,353.67 2 points shot taken every month if played over the entire duration
+
+add2015<-(160244+61190)
+print(add2015)
+prop2_2015<-(count2pt2015/add2015)
+print(prop2_2015)
+#.724 is the proportion of 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2016 (JAN1 to DEC31)
+filter2016<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2016', GameDate)))
+avg2016<-mean(filter2016$ShotMadeFlag)*100
+print(avg2016)
+#36.20531% 3 point shooting average in 2016
+print(count(filter2016))
+#67,209 3 point shots taken
+print(67209/12)
+#5,600.75 3 point shots taken per month if played for the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2016<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2016', GameDate)))
+avg2pt2016<-mean(filter2pt2016$ShotMadeFlag)*100
+print(avg2pt2016)
+#46.66818% 2 point FG made
+count2pt2016<-(count(filter2pt2016))
+print(count2pt2016)
+#110,607 2 point shots taken
+(110607/2)
+#55,305.5 2 points shot taken every month if played over the entire duration
+
+add2016<-(110607+22072)
+print(add2016)
+prop2_2016<-(count2pt2016/add2016)
+print(prop2_2016)
+#88,535 more 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2017 (JAN1 to DEC31)
+filter2017<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2017', GameDate)))
+avg2017<-mean(filter2017$ShotMadeFlag)*100
+print(avg2017)
+#36.20531% 3 point shooting average in 2017
+print(count(filter2017))
+#75,095 3 point shots taken
+print(75095/12)
+#6,257.917 3 point shots taken per month if played for the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2017<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2017', GameDate)))
+avg2pt2017<-mean(filter2pt2017$ShotMadeFlag)*100
+print(avg2pt2017)
+#46.66818% 2 point FG made
+count2pt2017<-(count(filter2pt2017))
+print(count2pt2017)
+#110,607 2 point shots taken
+(110607/2)
+#55,305.5 2 points shot taken every month if played over the entire duration
+
+add2017<-(110607+22072)
+print(add2017)
+prop2_2017<-(count2pt2017/add2017)
+print(prop2_2017)
+#88,535 more 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2018 (JAN1 to DEC31)
+filter2018<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2018', GameDate)))
+avg2018<-mean(filter2018$ShotMadeFlag)*100
+print(avg2018)
+#36.20531% 3 point shooting average in 2018
+print(count(filter2018))
+#79,277 3 point shots taken
+print(79277/12)
+#6,606.417 3 point shots taken per month if played for the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2018<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2018', GameDate)))
+avg2pt2018<-mean(filter2pt2018$ShotMadeFlag)*100
+print(avg2pt2018)
+#46.66818% 2 point FG made
+count2pt2018<-(count(filter2pt2018))
+print(count2pt2018)
+#110,607 2 point shots taken
+(110607/2)
+#55,305.5 2 points shot taken every month if played over the entire duration
+
+add2018<-(110607+22072)
+print(add2018)
+prop2_2018<-(count2pt2018/add2018)
+print(prop2_2018)
+#88,535 more 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2019 (JAN1 to DEC31)
+filter2019<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2019', GameDate)))
+avg2019<-mean(filter2019$ShotMadeFlag)*100
+print(avg2019)
+#36.20531% 3 point shooting average in 2019
+print(count(filter2019))
+#83,857 3 point shots taken
+print(83857/12)
+#6,988.083 3 point shots taken per month if played for the entire duration
+
+#Finding the amount of 2 point shots
+filter2pt2019<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2019', GameDate)))
+avg2pt2019<-mean(filter2pt2019$ShotMadeFlag)*100
+print(avg2pt2019)
+#46.66818% 2 point FG made
+count2pt2019<-(count(filter2pt2019))
+print(count2pt2019)
+#110,607 2 point shots taken
+(110607/2)
+#55,305.5 2 points shot taken every month if played over the entire duration
+
+add2019<-(110607+22072)
+print(add2019)
+prop2_2019<-(count2pt2019/add2019)
+print(prop2_2019)
+#88,535 more 2 point shots taken compared to 3 point shots 
+```
+
+```{r}
+#Finding the 3 point shot average and count from 2020 (JAN1 to MAR11)
+filter2020<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('2020', GameDate)))
+avg2020<-mean(filter2020$ShotMadeFlag)*100
+print(avg2020)
+#36.02976% 3 point shooting average in 2020
+print(count(filter2020))
+#31,993 3 point shots taken in 2 months
+print(31993/2.5)
+#12,797.2 shots taken per month
+
+#Finding the amount of 2 point shots
+filter2pt2020<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('2020', GameDate)))
+avg2pt2020<-mean(filter2pt2020$ShotMadeFlag)*100
+print(avg2pt2020)
+#46.66818% 2 point FG made
+count2pt2020<-(count(filter2pt2020))
+print(count2pt2020)
+#110,607 2 point shots taken
+(51011/2)
+#25,505.5 2 points shot taken every month if played over the entire duration
+
+#finding the proportion of 2 point shots vs 3 point shots during this time period.
+add2020<-(51011+31993)
+print(add2020)
+prop2_2020<-(count2pt2020/add2020)
+print(prop2_2020)
+#.6146 proportion of 2 point shots compared to 3 point shots  
+```
+
+```{r}
+#EASTERN CONFERENCE
+```
+
+```{r}
+#Filtering out the Orlando Magic
+df<-data.frame(NBAfile)
+MAGIC<-subset(NBAfile, TeamName=="Orlando Magic")
+view(MAGIC)
+```
+
+```{r}
+#Filtering out the Magic 3 point shots and finding the average made as well as the amount made
+MAGIC%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#13,907 made 3 point shots
+MagAvg3<-mean(MAGIC$ShotMadeFlag)*100
+print(MagAvg3)
+#44.987821% from behind the arc
+```
+
+```{r}
+#Filtering out the Indiana Pacers
+df<-data.frame(NBAfile)
+PACERS<-subset(NBAfile, TeamName=="Indiana Pacers")
+view(PACERS)
+```
+
+```{r}
+#Filtering out the Pacers 3 point shots and finding the average made as well as the amount made
+PACERS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#13,930 made 3 point shots
+PacAvg3<-mean(PACERS$ShotMadeFlag)*100
+print(PacAvg3)
+#44.83008% from behind the arc
+```
+
+```{r}
+#Filtering out the New York Knicks
+df<-data.frame(NBAfile)
+KNICKS<-subset(NBAfile, TeamName=="New York Knicks")
+view(KNICKS)
+```
+
+```{r}
+#Filtering out the Knicks 3 point shots and finding the average made as well as the amount made
+KNICKS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#13,420 made 3 point shots
+KniAvg3<-mean(KNICKS$ShotMadeFlag)*100
+print(KniAvg3)
+#44.52027% from behind the arc
+```
+
+```{r}
+#Filtering out the Boston Celtics
+df<-data.frame(NBAfile)
+CELTICS<-subset(NBAfile, TeamName=="Boston Celtics")
+view(CELTICS)
+```
+
+```{r}
+#Filtering out the Celtics 3 point shots and finding the average made as well as the amount made
+CELTICS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#15,107 made 3 point shots
+CelAvg3<-mean(CELTICS$ShotMadeFlag)*100
+print(CelAvg3)
+#45.07282% from behind the arc
+```
+
+```{r}
+#Filtering out the Miami Heat
+df<-data.frame(NBAfile)
+HEAT<-subset(NBAfile, TeamName=="Miami Heat")
+view(HEAT)
+```
+
+```{r}
+#Filtering out the Heat's 3 point shots and finding the average made as well as the amount made
+HEAT%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#14,137 made 3 point shots
+HeatAvg3<-mean(HEAT$ShotMadeFlag)*100
+print(HeatAvg3)
+#45.87821% from behind the arc
+```
+
+```{r}
+#Filtering out the Milwaukee Bucks
+df<-data.frame(NBAfile)
+BUCKS<-subset(NBAfile, TeamName=="Milwaukee Bucks")
+view(BUCKS)
+```
+
+```{r}
+#Filtering out the Bucks 3 point shots and finding the average made as well as the amount made
+BUCKS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#13,107 made 3 point shots
+BucksAvg3<-mean(BUCKS$ShotMadeFlag)*100
+print(BucksAvg3)
+#45.50177% from behind the arc
+```
+
+```{r}
+#Filtering out the Washington Wizards
+df<-data.frame(NBAfile)
+WIZARDS<-subset(NBAfile, TeamName=="Washington Wizards")
+view(WIZARDS)
+```
+
+```{r}
+#Filtering out the Wizards 3 point shots and finding the average made as well as the amount made
+WIZARDS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#11,958 made 3 point shots
+WizAvg3<-mean(WIZARDS$ShotMadeFlag)*100
+print(WizAvg3)
+#44.95375% from behind the arc
+```
+
+```{r}
+#Filtering out the Philadelphia 76ers
+df<-data.frame(NBAfile)
+PHILLY<-subset(NBAfile, TeamName=="Philadelphia 76ers")
+view(PHILLY)
+```
+
+```{r}
+#Filtering out the 76ers 3 point shots and finding the average made as well as the amount made
+PHILLY%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#11,177 made 3 point shots
+PhilAvg3<-mean(PHILLY$ShotMadeFlag)*100
+print(PhilAvg3)
+#44.62816% from behind the arc
+```
+
+```{r}
+#Filtering out the Cleveland Cavaliers
+df<-data.frame(NBAfile)
+CAVS<-subset(NBAfile, TeamName=="Cleveland Cavaliers")
+view(CAVS)
+```
+
+```{r}
+#Filtering out the Cavs 3 point shots and finding the average made as well as the amount made
+CAVS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#13,828 made 3 point shots
+CavsAvg3<-mean(CAVS$ShotMadeFlag)*100
+print(CavsAvg3)
+#44.87614% from behind the arc
+```
+
+```{r}
+#Filtering out the Toronto Raptors
+df<-data.frame(NBAfile)
+RAPTORS<-subset(NBAfile, TeamName=="Toronto Raptors")
+view(RAPTORS)
+```
+
+```{r}
+#Filtering out the Raptors 3 point shots and finding the average made as well as the amount made
+RAPTORS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#13,935 made 3 point shots
+RapAvg3<-mean(RAPTORS$ShotMadeFlag)*100
+print(RapAvg3)
+#44.98887% from behind the arc
+```
+
+```{r}
+#Filtering out the Brooklyn Nets
+df<-data.frame(NBAfile)
+NETS<-NBAfile%>%filter(str_detect(TeamName,"New Jersey Nets|Brooklyn Nets"))
+view(NETS)
+```
+
+```{r}
+#Filtering out the Bulls 3 point shots and finding the average made as well as the amount made
+NETS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#13,357 made 3 point shots
+NetsAvg3<-mean(NETS$ShotMadeFlag)*100
+print(NetsAvg3)
+#44.10105% from behind the arc
+```
+
+```{r}
+#Filtering out the Charlotte Hornets
+df<-data.frame(NBAfile)
+HORNETS<-NBAfile%>%filter(str_detect(TeamName,"Charlotte Hornets|Charlotte Bobcats"))
+view(HORNETS)
+```
+
+```{r}
+#Filtering out the Bulls 3 point shots and finding the average made as well as the amount made
+HORNETS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#10,969 made 3 point shots
+HornAvg3<-mean(HORNETS$ShotMadeFlag)*100
+print(HornAvg3)
+#44.12655% from behind the arc
+```
+
+```{r}
+#Filtering out the Atlanta Hawks
+df<-data.frame(NBAfile)
+HAWKS<-subset(NBAfile, TeamName=="Atlanta Hawks")
+view(HAWKS)
+```
+
+```{r}
+#Filtering out the Hawks 3 point shots and finding the average made as well as the amount made
+HAWKS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#13,277 made 3 point shots
+AtlAvg3<-mean(HAWKS$ShotMadeFlag)*100
+print(AtlAvg3)
+#44.83141% from behind the arc
+```
+
+```{r}
+#Filtering out the Detroit Pistons
+df<-data.frame(NBAfile)
+PISTONS<-subset(NBAfile, TeamName=="Detroit Pistons")
+view(PISTONS)
+```
+
+```{r}
+#Filtering out the Pistons 3 point shots and finding the average made as well as the amount made
+PISTONS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#12,774 made 3 point shots
+DetAvg3<-mean(PISTONS$ShotMadeFlag)*100
+print(DetAvg3)
+#44.49206% from behind the arc
+```
