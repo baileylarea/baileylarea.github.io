@@ -905,7 +905,7 @@ view(NETS)
 ```
 
 ```{r}
-#Filtering out the Bulls 3 point shots and finding the average made as well as the amount made
+#Filtering out the Nets 3 point shots and finding the average made as well as the amount made
 NETS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
 #13,357 made 3 point shots
 NetsAvg3<-mean(NETS$ShotMadeFlag)*100
@@ -921,7 +921,7 @@ view(HORNETS)
 ```
 
 ```{r}
-#Filtering out the Bulls 3 point shots and finding the average made as well as the amount made
+#Filtering out the Hornets 3 point shots and finding the average made as well as the amount made
 HORNETS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
 #10,969 made 3 point shots
 HornAvg3<-mean(HORNETS$ShotMadeFlag)*100
@@ -959,4 +959,86 @@ PISTONS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
 DetAvg3<-mean(PISTONS$ShotMadeFlag)*100
 print(DetAvg3)
 #44.49206% from behind the arc
+```
+```{r}
+#Filtering out the Detroit Pistons
+df<-data.frame(NBAfile)
+BULLS<-subset(NBAfile, TeamName=="Chicago Bulls")
+view(BULLS)
+```
+
+```{r}
+#Filtering out the Pistons 3 point shots and finding the average made as well as the amount made
+BULLS%>%filter(grepl('3PT Field Goal', ShotType) & grepl('1', ShotMadeFlag))
+#12,774 made 3 point shots
+ChiAvg3<-mean(BULLS$ShotMadeFlag)*100
+print(ChiAvg3)
+#43.97709% from behind the arc
+```
+
+
+```{r}
+library(ggplot2)
+Average<-c(44.492, 44.101, 44.831, 44.127, 44.989, 44.876, 44.628, 44.83, 44.953, 45.502,45.073, 45.878,44.52,44.988,43.977)
+Team<-c('Detroit Pistons', 'Brooklyn Nets', 'Atlanta Hawks','Charlotte Hornets', 'Toronto Raptors', 'Cleveland Cavaliers', 'Philadelpia 76ers', 'Indiana Pacers', 'Washington Wizards', 'Milwaukee Bucks', 'Boston Celtics', 'Miami Heat', 'New York Knicks', 'Orlando Magic', 'Chicago Bulls')
+df<-data.frame(Average,Team)
+head(df)
+cpe<-c("red1", "lightgray", "yellow", "turqoise2", "black", "red4", "royalblue4", "goldenrod1", "navyblue", "darkgreen", "springgreen4", "purple", "orange", "blue", "red")
+
+BarPlotEast<-ggplot(data=df, aes(x=Team, y=Average), aes(col=cpe))+ 
+  geom_bar(stat="identity", width=.5)+
+  theme(axis.text.x=element_text(angle=90))+
+  ggtitle("Average 3 Point Percentage in the Eastern Conference")
+  
+  
+  
+  
+print(BarPlotEast)
+```
+
+```{r}
+#Finding the 3 point shot average and count for the Warriors from 1997
+filter1997Warriors<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('1997',GameDate)&grepl('Golden State Warriors', TeamName)))
+avg1997Warriors<-mean(filter1997Warriors$ShotMadeFlag)*100
+print(avg1997Warriors)
+#26.72% 3 point shooting average in 1997
+print(count(filter1997Warriors))
+
+#Finding the amount of 2 point shots
+filter2pt1997Warriors<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('1997', GameDate)&grepl('Golden State Warriors', TeamName)))
+avg2pt1997Warriors<-mean(filter2pt1997Warriors$ShotMadeFlag)*100
+print(avg2pt1997Warriors)
+#43.03% 2 point FG made
+count2pt1997Warriors<-(count(filter2pt1997Warriors))
+print(count2pt1997Warriors)
+
+#finding the proportion of 2 point shots vs 3 point shots during this time period.
+add1997Warriors<-(232+2175)
+print(add1997Warriors)
+prop2_1997Warriors<-(count2pt1997Warriors/add1997Warriors)
+print(prop2_1997Warriors)
+#.904 is the proportion of 2 point shots taken compared to the amount of total shots
+```
+
+```{r}
+#Finding the 3 point shot average and count for the Warriors from 1998 
+filter1998Warriors<-NBAfile%>%filter((grepl('3PT Field Goal',ShotType) &grepl('1998',GameDate)&grepl('Golden State Warriors', TeamName)))
+avg1998Warriors<-mean(filter1998Warriors$ShotMadeFlag)*100
+print(avg1998Warriors)
+#27.37% 3 point shooting average in 1997
+print(count(filter1998Warriors))
+
+#Finding the amount of 2 point shots
+filter2pt1998Warriors<-NBAfile%>%filter((grepl('2PT Field Goal', ShotType)&grepl('1998', GameDate)&grepl('Golden State Warriors', TeamName)))
+avg2pt1998Warriors<-mean(filter2pt1998Warriors$ShotMadeFlag)*100
+print(avg2pt1998Warriors)
+#42.87% 2 point FG made
+count2pt1998Warriors<-(count(filter2pt1998Warriors))
+print(count2pt1998Warriors)
+
+#finding the proportion of 2 point shots vs 3 point shots during this time period.
+add1998Warriors<-(464+4012)
+prop2_1998Warriors<-(count2pt1998Warriors/add1998Warriors)
+print(prop2_1998Warriors)
+#.896 is the proportion of 2 point shots taken compared to the amount of total shots
 ```
